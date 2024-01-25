@@ -19,11 +19,13 @@ float ang1[3] = {47.6,46.4,63.2};
 float ang2[3] = {91.0,115.8,87.5};
 float pos[3][3] = {{0, 40, 0},{5, 35, 0},{10, 40, 0}};
 
-leg_status_t leg_status;
+leg_status_t leg_status1;
+leg_status_t leg_status2;
 servo_t servo[SERVO_NUM];
 uint32_t cnt = 0;
 
 IK_solver ik1;
+IK_solver ik2;
 /* USER CODE END PV */
 
 /* Private functions declaration ---------------------------------------------*/
@@ -68,28 +70,52 @@ static void leg_init(void) {
 	PWM_SetFrequency(&pwm1[1], 50);
 	PWM_SetFrequency(&pwm1[2], 50);
 	PWM_SetFrequency(&pwm1[3], 50);
+	PWM_SetFrequency(&pwm1[4], 50);
+	PWM_SetFrequency(&pwm2[1], 50);
+	PWM_SetFrequency(&pwm2[2], 50);
+	PWM_SetFrequency(&pwm2[3], 50);
+	PWM_SetFrequency(&pwm2[4], 50);
+	PWM_SetFrequency(&pwm3[1], 50);
+	PWM_SetFrequency(&pwm3[2], 50);
+	PWM_SetFrequency(&pwm3[3], 50);
+	PWM_SetFrequency(&pwm3[4], 50);
 	
 	IK_init(&ik1, 30, 27);
+	IK_init(&ik2, 30, 27);
 	
-	leg_status = LEG_STATUS1;
-	servo[0].angle = ang1[leg_status];
-	servo[1].angle = ang2[leg_status];
+	leg_status1 = LEG_STATUS1;
+	leg_status2 = LEG_STATUS3;
+	servo[0].angle = ang1[leg_status1];
+	servo[1].angle = ang2[leg_status1];
+	
+	servo[3].angle = ang1[leg_status2];
+	servo[4].angle = ang2[leg_status2];
+	
+	servo[6].angle = ang1[leg_status1];
+	servo[7].angle = ang2[leg_status1];
+	
+	servo[9].angle = ang1[leg_status2];
+	servo[10].angle = ang2[leg_status2];
+	
 	servo[2].duty = 0.075;
+	servo[5].duty = 0.075;
+	servo[8].duty = 0.075;
+	servo[11].duty = 0.075;
 }
 
 static void leg_status_switch(void) {
-	switch(leg_status) {
+	switch(leg_status1) {
 		case LEG_STATUS1:
-			if(cnt > TIME_MX / 2) {
-				leg_status = LEG_STATUS2;
+			if(cnt > TIME_MX) {
+				leg_status1 = LEG_STATUS2;
 				cnt = 0;
 			}
 			else 
 				cnt++;
 			break;
 		case LEG_STATUS2:
-			if(cnt > TIME_MX / 2) {
-					leg_status = LEG_STATUS3;
+			if(cnt > TIME_MX) {
+					leg_status1 = LEG_STATUS3;
 					cnt = 0;
 				}
 			else
@@ -97,17 +123,38 @@ static void leg_status_switch(void) {
 			break;
 		case LEG_STATUS3:
 			if(cnt > TIME_MX) {
-					leg_status = LEG_STATUS1;
+					leg_status1 = LEG_STATUS1;
 					cnt = 0;
 				}
 			else
 				cnt++;
 			break;
-		case LEG_STATUS4:
+		default:
+			break;
+	}
+	
+	switch(leg_status2) {
+		case LEG_STATUS1:
 			if(cnt > TIME_MX) {
-				leg_status = LEG_STATUS1;
+				leg_status1 = LEG_STATUS2;
 				cnt = 0;
 			}
+			else 
+				cnt++;
+			break;
+		case LEG_STATUS2:
+			if(cnt > TIME_MX) {
+					leg_status1 = LEG_STATUS3;
+					cnt = 0;
+				}
+			else
+				cnt++;
+			break;
+		case LEG_STATUS3:
+			if(cnt > TIME_MX) {
+					leg_status1 = LEG_STATUS1;
+					cnt = 0;
+				}
 			else
 				cnt++;
 			break;
@@ -117,9 +164,17 @@ static void leg_status_switch(void) {
 }
 
 static void leg_angle_set(void) {
-	IK_calc(&ik1, pos[leg_status][0], pos[leg_status][1], pos[leg_status][2]);
+	IK_calc(&ik1, pos[leg_status1][0], pos[leg_status1][1], pos[leg_status1][2]);
 	servo[0].angle = ik1.alpha;
 	servo[1].angle = ik1.beta;
+	servo[6].angle = ik1.alpha;
+	servo[7].angle = ik1.beta;
+	
+	IK_calc(&ik2, pos[leg_status2][0], pos[leg_status2][1], pos[leg_status2][2]);
+	servo[3].angle = ik2.alpha;
+	servo[4].angle = ik2.beta;
+	servo[9].angle = ik2.alpha;
+	servo[10].angle = ik2.beta;
 }
 
 static void leg_duty_set(void) {
@@ -128,5 +183,14 @@ static void leg_duty_set(void) {
 	
 	servo[0].duty = -(angle0 / 180.0f) * 0.1f + 0.125;
 	servo[1].duty = (angle1 / 180.0f) * 0.1f + 0.025;
+	
+	servo[3].duty = -(angle0 / 180.0f) * 0.1f + 0.125;
+	servo[4].duty = (angle1 / 180.0f) * 0.1f + 0.025;
+	
+	servo[6].duty = -(angle0 / 180.0f) * 0.1f + 0.125;
+	servo[7].duty = (angle1 / 180.0f) * 0.1f + 0.025;
+	
+	servo[9].duty = -(angle0 / 180.0f) * 0.1f + 0.125;
+	servo[10].duty = (angle1 / 180.0f) * 0.1f + 0.025;
 }
 /* USER CODE END PF */

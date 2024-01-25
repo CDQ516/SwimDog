@@ -5,8 +5,8 @@
 void Example_task(void * arg);
 
 #define STATUS_NUM 4
-#define SERVO_NUM 3
-#define TIME_MX 100
+#define SERVO_NUM 12
+#define TIME_MX 50
 
 typedef enum{
 	LEG_STATUS1,
@@ -20,7 +20,8 @@ typedef struct{
 	float duty;
 }servo_t;
 
-extern leg_status_t leg_status;
+extern leg_status_t leg_status1;
+extern leg_status_t leg_status2;
 extern servo_t servo[SERVO_NUM];
 
 /* Private functions declaration ---------------------------------------------*/

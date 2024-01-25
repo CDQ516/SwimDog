@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;..\Components</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;..\Components;..\Tasks;..\UserProg</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1222,6 +1222,31 @@
               <FileName>pwm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Components\pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>ik_solver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\ik_solver.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/Tasks</GroupName>
+          <Files>
+            <File>
+              <FileName>example_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tasks\example_task.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/UserProg</GroupName>
+          <Files>
+            <File>
+              <FileName>user_main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserProg\user_main.c</FilePath>
             </File>
           </Files>
         </Group>
